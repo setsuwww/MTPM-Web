@@ -16,7 +16,8 @@ type User struct {
 	ID        uint `gorm:"primaryKey"`
 	Name      string
 	Email     string `gorm:"uniqueIndex"`
-	Role      Role   `gorm:"type:varchar(20);default:'CLIENT'"`
+	Password  string
+	Role      Role `gorm:"type:varchar(20);default:'CLIENT'"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
