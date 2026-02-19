@@ -3,7 +3,8 @@ package database
 import (
 	"log"
 	"os"
-	"time"
+
+	"backend/internal/models"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -16,20 +17,31 @@ func Connect() {
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatal("Failed to connect to Neon:", err)
+		log.Fatal("Failed to connect:", err)
 	}
 
-	sqlDB, err := db.DB()
-	if err != nil {
-		log.Fatal("Failed to get sqlDB:", err)
-	}
-
-	// Connection Pool Config (PENTING)
-	sqlDB.SetMaxOpenConns(25)
-	sqlDB.SetMaxIdleConns(10)
-	sqlDB.SetConnMaxLifetime(5 * time.Minute)
-
+	// Simpan ke global
 	DB = db
 
-	log.Println("Database connected")
+	runMigrations()
+
+	log.Println("Database connected and migrated")
+}
+
+func runMigrations() {
+	err := DB.AutoMigrate(
+		&models.User{},
+		&models.Client{},
+		&models.Project{},
+		&models.Sprint{},
+		&models.Task{},
+		&models.Milestone{},
+		&models.ChangeRequest{},
+		&models.Expense{},
+		&models.TimeLog{},
+	)
+
+	if err != nil {
+		log.Fatal("Migration failed:", err)
+	}
 }
