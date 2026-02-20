@@ -1,21 +1,34 @@
 package helpers
 
 import (
-	"backend/internal/models"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var JWT_SECRET = []byte("supersecret") // bisa ambil dari env
+var jwtKey = []byte("supersecretkey")
 
-func GenerateToken(user models.User) (string, error) {
+func GenerateToken(userID uint, role string) (string, error) {
 	claims := jwt.MapClaims{
-		"user_id": user.ID,
-		"role":    user.Role,
-		"exp":     time.Now().Add(time.Hour * 72).Unix(),
+		"user_id": userID,
+		"role":    role,
+		"exp":     time.Now().Add(24 * time.Hour).Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(JWT_SECRET)
+	return token.SignedString(jwtKey)
+}
+
+func ParseToken(tokenString string) (jwt.MapClaims, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		return jwtKey, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		return claims, nil
+	}
+	return nil, err
 }

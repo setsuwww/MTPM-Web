@@ -17,7 +17,8 @@ type User struct {
 	Name      string
 	Email     string `gorm:"uniqueIndex"`
 	Password  string
-	Role      Role `gorm:"type:varchar(20);default:'CLIENT'"`
+	Role      Role `gorm:"type:varchar(20);default:CLIENT"`
+	IsActive  bool `gorm:"default:true"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }

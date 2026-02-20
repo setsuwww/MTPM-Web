@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/_stores/auth";
 
@@ -11,15 +11,26 @@ import ClientDashboard from "@/_components/common/dashboards/ClientDashboard";
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { user } = useAuthStore(); // user = { name, email, role }
+  const { user, restoreAuth, fetchCurrentUser } = useAuthStore();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) {
-      router.push("/login"); // redirect kalau belum login
-    }
-  }, [user, router]);
+    const init = async () => {
+      await restoreAuth();              // restore dari localStorage
+      await fetchCurrentUser();         // fetch dari backend
+      setLoading(false);
+    };
+    init();
+  }, [restoreAuth, fetchCurrentUser]);
 
-  if (!user) return null; // loading atau redirect
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push("/login");            // redirect kalau ga ada user
+    }
+  }, [loading, user, router]);
+
+  if (loading) return <div>Loading...</div>;
+  if (!user) return null;
 
   switch (user.role) {
     case "SUPER_ADMIN":

@@ -12,7 +12,7 @@ import (
 
 var DB *gorm.DB
 
-func Connect() {
+func Connect() *gorm.DB {
 	dsn := os.Getenv("DATABASE_URL")
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
@@ -20,14 +20,13 @@ func Connect() {
 		log.Fatal("Failed to connect:", err)
 	}
 
-	// Simpan ke global
 	DB = db
 
 	runMigrations()
 
 	log.Println("Database connected and migrated")
+	return db
 }
-
 func runMigrations() {
 	err := DB.AutoMigrate(
 		&models.User{},

@@ -14,12 +14,11 @@ func main() {
 		log.Println(".env not found, using system environment")
 	}
 
-	database.Connect()
+	db := database.Connect() // kembalikan *gorm.DB
+
+	r := router.SetupRouter(db)
 
 	log.Println("Application started successfully")
-
-	r := router.SetupRouter()
-
 	if err := r.Run(":8080"); err != nil {
 		log.Fatal("Failed to start server:", err)
 	}

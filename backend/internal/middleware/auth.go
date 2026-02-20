@@ -1,35 +1,69 @@
 package middleware
 
 import (
+	"backend/internal/helpers"
+	"backend/internal/models"
 	"net/http"
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v5"
+	"gorm.io/gorm"
 )
 
-var jwtSecret = []byte("your_secret_key") // nanti ambil dari env
-
-func AuthMiddleware() gin.HandlerFunc {
+func AuthMiddleware(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Missing Authorization header"})
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Missing Authorization header"})
+			c.Abort()
 			return
 		}
 
 		tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
-		token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
-			return jwtSecret, nil
-		})
-		if err != nil || !token.Valid {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+		claims, err := helpers.ParseToken(tokenStr)
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+			c.Abort()
 			return
 		}
 
-		claims := token.Claims.(jwt.MapClaims)
-		c.Set("user_id", claims["user_id"])
-		c.Set("role", claims["role"])
+		userIDFloat, ok := claims["user_id"].(float64)
+		if !ok {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token claims"})
+			c.Abort()
+			return
+		}
+
+		var user models.User
+		if err := db.First(&user, uint(userIDFloat)).Error; err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "User not found"})
+			c.Abort()
+			return
+		}
+
+		c.Set("currentUser", user)
 		c.Next()
+	}
+}
+
+func RoleMiddleware(allowedRoles ...models.Role) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		userIface, exists := c.Get("currentUser")
+		if !exists {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+			c.Abort()
+			return
+		}
+
+		user := userIface.(models.User)
+		for _, role := range allowedRoles {
+			if user.Role == role {
+				c.Next()
+				return
+			}
+		}
+
+		c.JSON(http.StatusForbidden, gin.H{"error": "Forbidden"})
+		c.Abort()
 	}
 }

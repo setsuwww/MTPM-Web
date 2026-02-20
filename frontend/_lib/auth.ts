@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useAuthStore } from "@/_stores/auth";
+import { useAuthStore, User } from "@/_stores/auth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
@@ -21,7 +21,7 @@ export const authService = {
   login: async (data: LoginData) => {
     const res = await axios.post(`${API_URL}/login`, data);
     const { token, user } = res.data;
-    useAuthStore.getState().setAuth(token, user);
+    useAuthStore.getState().setAuth(token, user as User);
     return res.data;
   },
 
@@ -34,7 +34,31 @@ export const authService = {
   },
 
   getAuthHeader: () => {
-    const token = useAuthStore.getState().token;
-    return { Authorization: `Bearer ${token}` };
+    return useAuthStore.getState().token
+      ? { Authorization: `Bearer ${useAuthStore.getState().token}` }
+      : {};
   },
+};
+
+export const getCurrentUser = async () => {
+  const token = getToken();
+  if (!token) return null;
+
+  try {
+    const res = await axios.get(`${API_URL}/auth/me`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!res.data || !res.data.user) return null;
+
+    return res.data.user;
+  } catch (err) {
+    console.error("Failed to fetch current user:", err);
+    return null;
+  }
+};
+
+export const getToken = (): string | null => {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem("token");
 };
