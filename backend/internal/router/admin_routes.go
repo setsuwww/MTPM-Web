@@ -15,10 +15,10 @@ func AdminRoutes(r *gin.Engine, db *gorm.DB) {
 	adminGroup := r.Group("/admin")
 	adminGroup.Use(middleware.AuthMiddleware(db))
 	{
-		adminGroup.GET("/users", middleware.RoleMiddleware(models.SUPER_ADMIN, models.COMPANY_ADMIN), uc.GetUsers)
-		adminGroup.GET("/users/:id", middleware.RoleMiddleware(models.SUPER_ADMIN, models.COMPANY_ADMIN), uc.GetUser)
-		adminGroup.POST("/users", middleware.RoleMiddleware(models.SUPER_ADMIN, models.COMPANY_ADMIN), uc.CreateUser)
-		adminGroup.PATCH("/users/:id", middleware.RoleMiddleware(models.SUPER_ADMIN, models.COMPANY_ADMIN), uc.UpdateUser)
-		adminGroup.DELETE("/users/:id", middleware.RoleMiddleware(models.SUPER_ADMIN, models.COMPANY_ADMIN), uc.DeleteUser)
+		adminGroup.GET("/users", middleware.RoleMiddleware(models.SUPER_ADMIN, models.ADMIN), uc.GetUsers)
+		adminGroup.GET("/users/:id", middleware.RoleMiddleware(models.SUPER_ADMIN, models.ADMIN), uc.GetUser)
+		adminGroup.POST("/users", middleware.RoleMiddleware(models.SUPER_ADMIN, models.ADMIN), uc.CreateUser)
+		adminGroup.PATCH("/users/:id", middleware.RoleMiddleware(models.SUPER_ADMIN, models.ADMIN), uc.UpdateUser)
+		adminGroup.DELETE("/users/:id", middleware.RoleMiddleware(models.SUPER_ADMIN, models.ADMIN), uc.DeleteUser)
 	}
 }

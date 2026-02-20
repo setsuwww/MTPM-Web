@@ -34,7 +34,7 @@ export default function DashboardPage() {
 
   switch (user.role) {
     case "SUPER_ADMIN":
-    case "COMPANY_ADMIN":
+    case "ADMIN":
       return <AdminDashboard />;
     case "PROJECT_MANAGER":
       return <PMDashboard />;

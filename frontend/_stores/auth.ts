@@ -1,14 +1,16 @@
 "use client";
 
 import { create } from "zustand";
-import { getToken } from "@/_lib/auth";
 import axios from "axios";
+
+import { getToken } from "@/_lib/auth";
+import { Role } from "@/_constants/user";
 
 export interface User {
   id: number;
   name: string;
   email: string;
-  role: string;
+  role: Role;
 }
 
 interface AuthState {

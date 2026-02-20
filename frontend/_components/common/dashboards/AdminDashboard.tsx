@@ -1,13 +1,31 @@
+'use client'
+
+import { ChartNoAxesCombined } from "lucide-react";
 import AdminLayout from "../dashboard-layouts/AdminLayout";
+import PageHeader from "../page-header";
+import { useRouter } from "next/navigation";
+import AreaDiagram from "@/app/(auth)/dashboard/admin/area-diagram";
+import StatsDiagram from "@/app/(auth)/dashboard/admin/stats-diagram";
 
 export default function AdminDashboard() {
+  const router = useRouter()
+
   return (
     <AdminLayout>
-      <h2 className="text-2xl font-bold mb-4">Welcome, Admin</h2>
-      <div className="grid grid-cols-3 gap-6">
-        <div className="bg-white p-4 rounded shadow">Total Users: 0</div>
-        <div className="bg-white p-4 rounded shadow">Active Projects: 0</div>
-        <div className="bg-white p-4 rounded shadow">Pending Leads: 0</div>
+      <PageHeader
+        icon={ChartNoAxesCombined}
+        title="Daily statistic"
+        description="View & record data on Daily"
+        action={{
+          label: "Add User",
+          onClick: () => router.push("/admin/users/create")
+        }}
+      />
+
+      <StatsDiagram />
+
+      <div className="mt-4">
+        <AreaDiagram />
       </div>
     </AdminLayout>
   );

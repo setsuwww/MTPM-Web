@@ -6,7 +6,7 @@ type Role string
 
 const (
 	SUPER_ADMIN     Role = "SUPER_ADMIN"
-	COMPANY_ADMIN   Role = "COMPANY_ADMIN"
+	ADMIN           Role = "ADMIN"
 	PROJECT_MANAGER Role = "PROJECT_MANAGER"
 	DEVELOPER       Role = "DEVELOPER"
 	CLIENT          Role = "CLIENT"
