@@ -76,28 +76,14 @@ Sistem deteksi overbudget 33%
 Budget Proyek = 30 juta
 Cost Developer = 20 juta (berdasarkan jam)
 
-
 Sistem bisa hitung:
 Sisa margin
 Prediksi profit akhir
 
-🔹 Workload Developer
-
-Dev A overloaded?
-Dev B idle?
-Siapa paling efisien?
-
-🔹 Delay Risk
-
-Kalau:
-
-70% waktu terpakai
-Baru 40% task selesai
-Sistem beri warning “High Delay Risk”
-
 🔷 Jadi Perannya Apa?
 
 Bukan hanya:
+
 Admin assign developer.
 Tapi lebih ke:
 CEO software house tahu:
@@ -110,36 +96,36 @@ Estimasi mana yang sering meleset
 
 Dalam satu perusahaan IT:
 
-Role	    Fungsi
-Admin	    Manage semua
-PM	        Kelola sprint & task
-Developer	Update task & log time
-Finance	    Lihat margin & billing
-Owner	    Lihat analytics global
+Super Admin ( Seluruh platform ) {
+    - CRUD semua perusahaan, user, project, task
+    - Assign admin / developer
+    - Lihat semua laporan / analytics
+    - Manage subscription / billing
+}
 
-🔷 Ini Bukan Trello Clone
+Company Admin ( Perusahaan tertentu ) {
+    - CRUD user & developer dalam perusahaannya
+    - CRUD project dan task
+    - Assign task ke developer
+    - Lihat laporan / analytics perusahaan
+}
 
-Trello hanya:
-Task
-Status
-Board
-Delivery Intelligence:
-Task
-Sprint
-Budget
-Margin
-Resource allocation
-Estimation analytics
-Financial projection
+Project Manager (PM, ( Project tertentu )) {
+    - CRUD task & milestones
+    - Assign task ke developer
+    - Update status task
+    - Lihat progress project
+}
 
-🔷 Contoh Real Case Masalah Software House
+Developer ( Task tertentu ) {
+    - Update task progress
+    - Submit hasil task
+    - Tambah komentar / notes
+    - Lihat project / task terkait
+}
 
-Banyak software house:
-Underestimate project
-Overwork developer
-Tidak tahu margin real
-Client minta revisi terus tanpa kontrol scope
-Platform ini membantu:
-Scope control
-Change request tracking
-Cost adjustment
+Client / Viewer ( Project tertentu ) {
+    - Lihat progress project / task
+    - Submit request / feedback
+    - Tidak bisa edit task / project
+}

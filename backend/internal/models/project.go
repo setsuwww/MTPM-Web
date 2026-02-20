@@ -2,14 +2,27 @@ package models
 
 import "time"
 
+type Status string
+
+const (
+	PENDING   Status = "PENDING"
+	APPROVED  Status = "APPROVED"
+	REJECTED  Status = "REJECTED"
+	CANCELED  Status = "CANCELED"
+	COMPLETED Status = "COMPLETED"
+)
+
 type Project struct {
 	ID       uint `gorm:"primaryKey"`
 	Name     string
 	ClientID uint
-	Client   Client
-	Status   string // DRAFT, ACTIVE, COMPLETED, CANCELLED
+	Client   Client `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Status   Status `gorm:"type:varchar(20);default:'PENDING'"`
 
-	ContractValue  float64 // Total deal value
+	Milestones []Milestone
+	Tasks      []Task
+
+	ContractValue  float64
 	EstimatedHours float64
 	EstimatedCost  float64
 

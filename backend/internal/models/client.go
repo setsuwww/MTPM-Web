@@ -7,6 +7,7 @@ type Client struct {
 	Name      string
 	Email     string
 	Company   string
+	Projects  []Project `gorm:"foreignKey:ClientID"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }

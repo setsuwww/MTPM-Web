@@ -6,18 +6,21 @@ import (
 	"github.com/joho/godotenv"
 
 	"backend/internal/database"
-	"backend/internal/models"
+	"backend/internal/router"
 )
 
 func main() {
-	godotenv.Load()
+	if err := godotenv.Load(); err != nil {
+		log.Println(".env not found, using system environment")
+	}
 
 	database.Connect()
 
-	err := database.DB.AutoMigrate(&models.User{})
-	if err != nil {
-		log.Fatal("Migration failed:", err)
-	}
+	log.Println("Application started successfully")
 
-	log.Println("App started")
+	r := router.SetupRouter()
+
+	if err := r.Run(":8080"); err != nil {
+		log.Fatal("Failed to start server:", err)
+	}
 }

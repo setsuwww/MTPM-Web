@@ -1,8 +1,6 @@
 package middleware
 
 import (
-	"backend/internal/database"
-	"backend/internal/models"
 	"net/http"
 	"strings"
 
@@ -10,47 +8,28 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var JWT_SECRET = []byte("supersecret") // bisa ambil dari os.Getenv("JWT_SECRET")
+var jwtSecret = []byte("your_secret_key") // nanti ambil dari env
 
-type Claims struct {
-	UserID uint
-	Role   models.Role
-	jwt.RegisteredClaims
-}
-
-// AuthMiddleware: periksa header Authorization, validasi JWT
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header required"})
-			c.Abort()
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Missing Authorization header"})
 			return
 		}
 
-		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
-		token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
-			return JWT_SECRET, nil
+		tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
+		token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
+			return jwtSecret, nil
 		})
 		if err != nil || !token.Valid {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
-			c.Abort()
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
 			return
 		}
 
-		claims := token.Claims.(*Claims)
-
-		// ambil user dari DB
-		var user models.User
-		if err := database.DB.First(&user, claims.UserID).Error; err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "User not found"})
-			c.Abort()
-			return
-		}
-
-		// simpan user di context
-		c.Set("currentUser", user)
-
+		claims := token.Claims.(jwt.MapClaims)
+		c.Set("user_id", claims["user_id"])
+		c.Set("role", claims["role"])
 		c.Next()
 	}
 }
