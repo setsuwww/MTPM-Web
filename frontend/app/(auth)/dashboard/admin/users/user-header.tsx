@@ -42,9 +42,7 @@ export default function UserHeader({ selectedCount, totalUsers,
 
       {/* Search and Filters Card */}
       <Card className="border border-gray-200 dark:border-gray-800">
-        <CardContent className="p-4">
-          <div className="flex flex-col lg:flex-row gap-4">
-            {/* Search */}
+          <div className="flex flex-col lg:flex-row gap-4 px-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
@@ -93,8 +91,7 @@ export default function UserHeader({ selectedCount, totalUsers,
             </div>
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex flex-wrap justify-between items-center mt-4 pt-4 border-t border-gray-200 dark:border-gray-800">
+          <div className="flex flex-wrap justify-between items-center mt-4 pt-4 px-4 border-t border-gray-200 dark:border-gray-800">
             <p className="text-sm text-gray-500 dark:text-gray-400">
               {selectedCount} of {totalUsers} user(s) selected
             </p>
@@ -131,7 +128,6 @@ export default function UserHeader({ selectedCount, totalUsers,
               </Button>
             </div>
           </div>
-        </CardContent>
       </Card>
     </div>
   );

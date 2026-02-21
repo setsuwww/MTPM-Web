@@ -7,13 +7,13 @@ export type Role =
 
 export const ROLE_COLORS: Record<Role | string, string> = {
   SUPER_ADMIN:
-    "bg-purple-100 text-purple-700 border border-purple-200",
+    "bg-purple-50 text-purple-700 border border-purple-300/60",
   ADMIN:
-    "bg-rose-100 text-rose-700 border border-rose-200",
+    "bg-rose-50 text-rose-700 border border-rose-300/60",
   PROJECT_MANAGER:
-    "bg-amber-100 text-amber-700 border border-amber-200",
+    "bg-sky-50 text-sky-700 border border-sky-300/60",
   DEVELOPER:
-    "bg-yellow-100 text-yellow-700 border border-yellow-200",
+    "bg-yellow-50 text-yellow-700 border border-yellow-300/60",
   CLIENT:
-    "bg-green-100 text-green-700 border border-green-200",
+    "bg-green-50 text-green-700 border border-green-300/60",
 };
