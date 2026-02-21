@@ -1,67 +1,154 @@
-# Delivery Intelligence SaaS
+# Multi-Tenant Project Management SaaS
 
-A web-based platform for software houses to manage projects, resources, budgets, and timelines with intelligent insights and analytics.
-
----
-
-## 🚀 Features
-
-### 1. **User & Role Management**
-- Multi-role support:
-  - **Admin** – manage users, clients, projects
-  - **Project Manager (PM)** – create projects, milestones, assign tasks
-  - **Developer** – update task status, log work hours
-  - **Finance** – track budgets, margins, profits
-  - **Client** – submit project requests, track progress
-- Role-based access control using middleware (Golang backend)
-
-### 2. **Project Lifecycle**
-- **Pre-Sales / Lead Stage**
-  - Client submits request
-  - Admin/PM logs lead & estimates scope, budget, and hours
-  - Project created upon approval
-- **Project Setup**
-  - Milestones & Sprints creation
-  - Task breakdown and developer assignment
-- **Task & Time Tracking**
-  - Developers log time and update task status
-  - Automated cost and budget tracking
-
-### 3. **Intelligence & Analytics**
-- **Overbudget / Underbudget detection**
-- **Profit margin and burn rate calculation**
-- **Developer workload monitoring**
-- **Delay risk alerts**
-- Dashboards for Owner & Finance roles with detailed metrics
-
-### 4. **Client Features**
-- View project status and progress
-- Approve / reject change requests
-- Track milestones and deadlines
-
-### 5. **Authentication**
-- Secure registration & login
-- JWT-based auth stored in client-side state (Zustand)
-- Role-based middleware for access control
+Enterprise-grade Multi-Tenant Project Management System built for scalability, data isolation, and production-level architecture.
 
 ---
 
-## Technology Stack
+## Application Purpose
 
-**Frontend**
-- [Next.js App Router](https://nextjs.org/)
-- [Shadcn UI Components](https://shadcn-ui.com/)
-- [TailwindCSS](https://tailwindcss.com/)
-- [Zustand](https://zustand-demo.pmnd.rs/) State management
-- [TanStack Query](https://tanstack.com/query/latest) API fetching
-
-**Backend**
-- [Golang](https://gin-gonic.com/en/)
-- [Neon](https://neon.com/) Postgresql's Cloud
-- [Postgresql](https://www.postgresql.org/) Database
-
-**DevOps / Tools**
-- GitHub / GitLab for source control
-- Environment variables stored in `.env` (never push to repo)
+This application is a SaaS-based multi-tenant project management system that enables multiple organizations to manage projects, tasks, collaboration, and analytics within a single platform while ensuring strict tenant-level data isolation.
 
 ---
+
+## Core Concept: Multi-Tenancy
+
+Multi-tenancy means:
+
+- One application
+- Multiple organizations (tenants)
+- Strict data isolation per organization
+- Shared infrastructure
+- Scoped access via organization_id
+
+Each request is resolved against a tenant context.
+
+---
+
+## Core Functionalities
+
+### 1. Organization Management
+- Create organization
+- Invite members
+- Role assignment
+- Tenant isolation enforcement
+
+### 2. User & Access Control
+- Authentication (JWT / Session)
+- RBAC (Role-Based Access Control)
+- Organization-based membership
+
+### 3. Project Management
+- Create projects
+- Assign members
+- Track progress
+- Project status lifecycle
+
+### 4. Task Management
+- Create, update, delete tasks
+- Assign task to user
+- Status management
+- Priority system
+- Due dates
+
+### 5. Collaboration
+- Task comments
+- Activity logs
+- File attachments
+
+### 6. Analytics
+- Task completion rate
+- Member productivity
+- Project progress metrics
+
+---
+
+## Roles
+
+| Role   | Description |
+|--------|------------|
+| Owner  | Full organization control |
+| Admin  | Manage projects & members |
+| Member | Manage assigned tasks |
+| Viewer | Read-only access |
+
+---
+
+## Core Entities
+
+- Organization
+- User
+- OrganizationMember
+- Project
+- ProjectMember
+- Task
+- TaskComment
+- ActivityLog
+- Attachment
+- Invitation
+
+---
+
+## Helper Features
+
+- Search
+- Sort
+- Filter
+- View Mode (Board / List)
+- Select
+- Select-All
+- Delete-Selected
+- Delete-All
+- Export CSV
+- Export DOCX
+
+---
+
+## Architecture Overview
+
+Frontend:
+- Next.js
+- OOP Typescript
+- Zustand & Tailwindcss
+- API Integration
+
+Backend:
+- Golang
+- PostgreSQL
+- Neon (Postgresql Cloud)
+
+---
+
+## Scalability
+
+Designed for:
+
+- Horizontal API scaling
+- Read replicas
+- Background job processing
+- Tenant-aware indexing
+- Rate limiting
+- Audit logging
+
+---
+
+## Deployment Strategy
+
+- Dockerized services
+- Separate staging & production
+- Environment-based configuration
+- CI/CD pipeline ready
+
+---
+
+## Target Scale
+
+Supports:
+
+- Thousands of organizations
+- Millions of tasks
+- Horizontal infrastructure growth
+- Multi-region deployment (future-ready)
+
+---
+
+This system is designed as a portfolio-level enterprise SaaS architecture demonstrating fullstack capability, multi-tenant security design, and scalable backend structure.
