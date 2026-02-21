@@ -42,7 +42,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
   },
 
-  restoreAuth: async () => {
+  restoreAuth: async (): Promise<User | null> => {
     if (typeof window === "undefined") return null;
 
     const token = localStorage.getItem("token");
@@ -60,7 +60,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
     if (token && user) {
       set({ token, user });
-      return user;
+      return user; // <-- kembalikan User
     }
     return null;
   },

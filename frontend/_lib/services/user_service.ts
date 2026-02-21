@@ -15,16 +15,17 @@ export class UserService {
 
   // Get all users
   async getAll(): Promise<User[]> {
-    const res = await axios.get(`${this.apiUrl}/users`, {
+    const res = await axios.get(`${this.apiUrl}/admin/users`, {
       headers: authService.getAuthHeader(),
     });
-    return res.data.users || [];
+    console.log(authService.getAuthHeader())
+    return res.data || [];
   }
 
   // Get single user by ID
   async getById(id: number): Promise<User | null> {
     try {
-      const res = await axios.get(`${this.apiUrl}/users/${id}`, {
+      const res = await axios.get(`${this.apiUrl}/admin/users/${id}`, {
         headers: authService.getAuthHeader(),
       });
       return res.data.user;
@@ -37,7 +38,7 @@ export class UserService {
   // Create user
   async create(payload: CreateUserPayload): Promise<User | null> {
     try {
-      const res = await axios.post(`${this.apiUrl}/users`, payload, {
+      const res = await axios.post(`${this.apiUrl}/admin/users`, payload, {
         headers: authService.getAuthHeader(),
       });
       return res.data.user;
@@ -50,7 +51,7 @@ export class UserService {
   // Update user
   async update(id: number, payload: UpdateUserPayload): Promise<User | null> {
     try {
-      const res = await axios.put(`${this.apiUrl}/users/${id}`, payload, {
+      const res = await axios.put(`${this.apiUrl}/admin/users/${id}`, payload, {
         headers: authService.getAuthHeader(),
       });
       return res.data.user;
@@ -63,7 +64,7 @@ export class UserService {
   // Delete user
   async delete(id: number): Promise<boolean> {
     try {
-      await axios.delete(`${this.apiUrl}/users/${id}`, {
+      await axios.delete(`${this.apiUrl}/admin/users/${id}`, {
         headers: authService.getAuthHeader(),
       });
       return true;

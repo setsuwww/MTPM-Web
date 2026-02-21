@@ -1,9 +1,9 @@
 export interface User {
-  id: number;
-  name: string;
-  email: string;
-  role: string;
-  isActive: boolean;
+  ID: number;
+  Name: string;
+  Email: string;
+  Role: string | "SUPER_ADMIN" | "ADMIN" | "PROJECT_MANAGER" | "DEVELOPER" | "CLIENT";
+  IsActive: boolean;
 }
 
 export interface CreateUserPayload {

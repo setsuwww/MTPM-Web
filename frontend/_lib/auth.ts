@@ -20,7 +20,10 @@ export interface RegisterData {
 export const authService = {
   login: async (data: LoginData) => {
     const res = await axios.post(`${API_URL}/login`, data);
+
     const { token, user } = res.data;
+    localStorage.setItem("token", token);
+
     useAuthStore.getState().setAuth(token, user as User);
     return res.data;
   },
@@ -34,9 +37,9 @@ export const authService = {
   },
 
   getAuthHeader: () => {
-    return useAuthStore.getState().token
-      ? { Authorization: `Bearer ${useAuthStore.getState().token}` }
-      : {};
+    if (typeof window === "undefined") return {};
+    const token = localStorage.getItem("token");
+    return token ? { Authorization: `Bearer ${token}` } : {};
   },
 };
 

@@ -1,5 +1,7 @@
 "use client";
 
+
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { User, Settings, LogOut, User2 } from "lucide-react";
 
@@ -11,6 +13,14 @@ import { ROLE_COLORS } from "@/_constants/user";
 export default function AdminHeader() {
   const router = useRouter();
   const { user, resetAuth } = useAuthStore();
+  const [loadingUser, setLoadingUser] = useState(true);
+
+  useEffect(() => {
+    useAuthStore.getState().restoreAuth();
+    setLoadingUser(false);
+  }, []);
+
+  if (loadingUser) return null; // atau skeleton
 
   const handleLogout = () => {
     resetAuth();
