@@ -105,7 +105,6 @@ export default function UserActions({
   return (
     <>
       <div className="flex items-center justify-end gap-2">
-        {/* Quick Actions - Visible on larger screens */}
         <div className="hidden sm:flex items-center gap-1">
           <Button
             variant="ghost"
@@ -150,25 +149,11 @@ export default function UserActions({
             <DropdownMenuLabel>User Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
 
-            {/* View Details */}
-            <DropdownMenuItem onClick={handleViewDetails} className="cursor-pointer">
-              <Eye className="h-4 w-4 mr-2 text-teal-600" />
-              <span>View Details</span>
-            </DropdownMenuItem>
-
-            {/* Edit User */}
-            <DropdownMenuItem onClick={handleEdit} className="cursor-pointer">
-              <Pencil className="h-4 w-4 mr-2 text-blue-600" />
-              <span>Edit User</span>
-            </DropdownMenuItem>
-
-            {/* Copy Email */}
-            <DropdownMenuItem onClick={handleCopyEmail} className="cursor-pointer">
-              <Copy className="h-4 w-4 mr-2 text-gray-600" />
+            <DropdownMenuItem onClick={handleCopyEmail} className="cursor-pointer cursor-pointer text-gray-400">
+              <Copy className="h-4 w-4 mr-2" />
               <span>Copy Email</span>
             </DropdownMenuItem>
 
-            {/* Send Invitation - Only for inactive users */}
             {!user.IsActive && onResendInvitation && (
               <DropdownMenuItem onClick={handleResendInvitation} className="cursor-pointer">
                 <Mail className="h-4 w-4 mr-2 text-purple-600" />
@@ -178,7 +163,6 @@ export default function UserActions({
 
             <DropdownMenuSeparator />
 
-            {/* Status Toggle */}
             {onStatusChange && (
               <DropdownMenuItem
                 onClick={() => setShowStatusDialog(true)}
@@ -198,12 +182,21 @@ export default function UserActions({
               </DropdownMenuItem>
             )}
 
-            {/* Delete User - With warning color */}
+            <DropdownMenuItem onClick={handleViewDetails} className="cursor-pointer text-gray-400 focus:text-blue-600 focus:bg-blue-50">
+              <Eye className="h-4 w-4 mr-2 focus:text-blue-600" />
+              <span>View Details</span>
+            </DropdownMenuItem>
+
+            <DropdownMenuItem onClick={handleEdit} className="cursor-pointer text-gray-400 focus:text-blue-600 focus:bg-blue-50">
+              <Pencil className="h-4 w-4 mr-2 focus:text-blue-600" />
+              <span>Edit User</span>
+            </DropdownMenuItem>
+
             <DropdownMenuItem
               onClick={() => setShowDeleteDialog(true)}
-              className="cursor-pointer text-red-600 focus:text-red-600"
+              className="cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50"
             >
-              <Trash2 className="h-4 w-4 mr-2" />
+              <Trash2 className="h-4 w-4 mr-2 text-red-600 focus:text-red-600" />
               <span>Delete User</span>
             </DropdownMenuItem>
           </DropdownMenuContent>

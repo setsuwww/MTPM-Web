@@ -84,15 +84,12 @@ export default function UserTable({
             <TableHead className="font-semibold">Email</TableHead>
             <TableHead className="font-semibold">Role</TableHead>
             <TableHead className="font-semibold">Status</TableHead>
-            <TableHead className="font-semibold text-right">Actions</TableHead>
+            <TableHead className="font-semibold text-right pr-6">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {users.map((user) => (
-            <TableRow
-              key={user.ID}
-              className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors group"
-            >
+            <TableRow key={user.ID} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors group">
               <TableCell>
                 <Checkbox
                   checked={selectedIds.includes(user.ID)}
@@ -101,9 +98,9 @@ export default function UserTable({
                 />
               </TableCell>
               <TableCell>
-                <div className="flex items-center gap-3">
-                  <Avatar className="h-9 w-9 border-2 border-teal-100 dark:border-teal-900">
-                    <AvatarFallback className="bg-teal-50 text-teal-700 dark:bg-teal-900/50 dark:text-teal-300 text-sm font-medium">
+                <div className="flex items-center gap-3 py-1">
+                  <Avatar className="h-9 w-9 border-2 border-teal-700">
+                    <AvatarFallback className="bg-teal-700 text-teal-50 text-sm font-medium">
                       {getInitials(user.Name)}
                     </AvatarFallback>
                   </Avatar>
@@ -126,10 +123,10 @@ export default function UserTable({
               </TableCell>
               <TableCell>
                 <Badge
-                  variant={user.IsActive ? "default" : "destructive"}
+                  variant="outline"
                   className={`${user.IsActive
-                    ? 'bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-200 hover:bg-teal-200'
-                    : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200'}
+                    ? 'text-teal-600'
+                    : 'text-red-600'}
                     font-medium px-3 py-1 cursor-pointer transition-colors`}
                   onClick={() => onStatusChange && onStatusChange(user.ID, !user.IsActive)}
                 >
