@@ -1,8 +1,8 @@
 package router
 
 import (
-	"backend/internal/controllers"
-	"backend/internal/middleware"
+	"backend/resource/controllers"
+	"backend/resource/middleware"
 
 	"gorm.io/gorm"
 

@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"backend/internal/helpers"
-	"backend/internal/models"
+	"backend/resource/models"
+	"backend/resource/utils"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -94,7 +94,7 @@ func (u *UserController) CreateUser(c *gin.Context) {
 	user := models.User{
 		Name:     input.Name,
 		Email:    input.Email,
-		Password: helpers.HashPassword(input.Password),
+		Password: utils.HashPassword(input.Password),
 		Role:     input.Role,
 		IsActive: true,
 	}
@@ -157,7 +157,7 @@ func (u *UserController) UpdateUser(c *gin.Context) {
 		user.IsActive = *input.IsActive
 	}
 	if input.Password != nil && *input.Password != "" {
-		user.Password = helpers.HashPassword(*input.Password)
+		user.Password = utils.HashPassword(*input.Password)
 	}
 
 	if err := u.DB.Save(&user).Error; err != nil {

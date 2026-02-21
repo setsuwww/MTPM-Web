@@ -1,131 +1,203 @@
-Delivery Intelligence SaaS untuk software house bukan cuma:
-Terima order → assign dev → kasih deadline
-Melainkan sistem untuk mengontrol:
-Scope
-Resource
-Biaya
-Profit margin
-Risiko keterlambatan
+# Backend - Multi-Tenant Project Management SaaS
 
-🔷 Gambaran Alur Nyata (Use Case CMS Project)
+Backend built using Golang with Clean Architecture and strict tenant isolation enforcement.
 
-Misal: Client datang minta CMS custom.
+---
 
-1️⃣ Pre-Sales / Deal Stage
+## Backend Responsibilities
 
-Client Request
-    ↓
-Admin input Lead
-    ↓
-Scope & Estimasi dibuat
-    ↓
-Budget disetujui
-    ↓
-Project dibuat
+- Authentication & Authorization
+- Tenant resolution
+- RBAC enforcement
+- Business logic
+- Data isolation
+- Background jobs
+- Export processing
+- Audit logging
 
+---
 
-Data yang dicatat:
-Estimasi jam kerja
-Rate developer
-Target deadline
-Total budget kontrak
+## Architecture Pattern
 
-2️⃣ Project Setup
+Clean Architecture:
 
-Project Created
-    ↓
-Milestone dibuat
-    ↓
-Sprint dibuat
-    ↓
-Task breakdown
+- Router Layer
+- Middleware Layer
+- Controller Layer
+- Service Layer
+- Repository Layer
+- Domain Entities
 
+---
 
-Contoh milestone:
+## Multi-Tenant Enforcement
 
-UI selesai
-API selesai
-Testing
-Deployment
+Tenant resolved via:
 
-3️⃣ Assignment & Tracking
+- Subdomain
+OR
+- organization_id from JWT
 
-PM assign Developer
-        ↓
-Developer log time
-        ↓
-Status task berubah
-        ↓
-Sprint ditutup
+All queries must include:
 
-Di sini sistem mulai bekerja secara intelligence.
+WHERE organization_id = ?
 
-🔷 Di Mana “Intelligence”-nya?
+Composite index required:
 
-Bukan cuma progress bar.
-Sistem menghitung:
+(organization_id, id)
+(organization_id, project_id)
+(organization_id, status)
 
-🔹 Estimasi vs Realisasi
+---
 
-CMS diestimasi 120 jam
-Ternyata 160 jam
-Sistem deteksi overbudget 33%
+## Core Entities
 
-🔹 Burn Rate
+### Organization
+- id
+- name
+- created_at
 
-Budget Proyek = 30 juta
-Cost Developer = 20 juta (berdasarkan jam)
+### User
+- id
+- email
+- password_hash
+- created_at
 
-Sistem bisa hitung:
-Sisa margin
-Prediksi profit akhir
+### OrganizationMember
+- id
+- user_id
+- organization_id
+- role
 
-🔷 Jadi Perannya Apa?
+### Project
+- id
+- organization_id
+- name
+- status
 
-Bukan hanya:
+### Task
+- id
+- project_id
+- organization_id
+- title
+- description
+- status
+- priority
+- assignee_id
+- due_date
 
-Admin assign developer.
-Tapi lebih ke:
-CEO software house tahu:
-Proyek mana yang untung
-Proyek mana yang hampir rugi
-Developer mana bottleneck
-Estimasi mana yang sering meleset
+### TaskComment
+- id
+- task_id
+- user_id
+- message
 
-🔷 Siapa User-nya?
+### ActivityLog
+- id
+- organization_id
+- actor_id
+- entity_type
+- entity_id
+- action
+- timestamp
 
-Dalam satu perusahaan IT:
+---
 
-Super Admin ( Seluruh platform ) {
-    - CRUD semua perusahaan, user, project, task
-    - Assign admin / developer
-    - Lihat semua laporan / analytics
-    - Manage subscription / billing
-}
+## RBAC Implementation
 
-Company Admin ( Perusahaan tertentu ) {
-    - CRUD user & developer dalam perusahaannya
-    - CRUD project dan task
-    - Assign task ke developer
-    - Lihat laporan / analytics perusahaan
-}
+Middleware:
+- Validate JWT
+- Resolve organization
+- Check role permission matrix
 
-Project Manager (PM, ( Project tertentu )) {
-    - CRUD task & milestones
-    - Assign task ke developer
-    - Update status task
-    - Lihat progress project
-}
+Policy-based access:
+- Project-level check
+- Task-level check
 
-Developer ( Task tertentu ) {
-    - Update task progress
-    - Submit hasil task
-    - Tambah komentar / notes
-    - Lihat project / task terkait
-}
+---
 
-Client / Viewer ( Project tertentu ) {
-    - Lihat progress project / task
-    - Submit request / feedback
-    - Tidak bisa edit task / project
-}
+## ⚙ Core Features
+
+### Task Operations
+- Create
+- Update
+- Delete
+- Bulk delete
+- Reassign
+- Change status
+
+### Project Operations
+- Create
+- Update
+- Archive
+- Member assignment
+
+### Organization Operations
+- Invite member
+- Change role
+- Remove member
+
+---
+
+## 🧰 Helper Features
+
+### Search
+PostgreSQL Full Text Search
+
+### Sort
+Query param:
+?sort=created_at&order=desc
+
+### Filter
+?status=todo
+?priority=high
+?assignee_id=123
+
+### Bulk Operations
+- delete_selected
+- delete_all (scoped by filter)
+
+### Export
+- CSV generation (background job)
+- Word (.docx) export
+- File stored in object storage
+
+---
+
+## Background Jobs
+
+Queue system handles:
+- Email notifications
+- Export processing
+- Analytics aggregation
+- Audit log compaction
+
+---
+
+## Performance Considerations
+
+- Use pagination (limit/offset or cursor)
+- Avoid N+1 queries
+- Preload relations carefully
+- Redis caching for permission matrix
+- Rate limiting middleware
+
+---
+
+## Security Checklist
+
+- Tenant isolation enforced in repository layer
+- Input validation
+- SQL injection prevention
+- Password hashing (bcrypt/argon2)
+- Role escalation prevention
+- Audit logging enabled
+
+---
+
+Backend demonstrates:
+- Multi-tenant isolation
+- RBAC
+- Clean architecture
+- Scalable service design
+- Enterprise-ready structure

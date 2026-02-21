@@ -1,9 +1,9 @@
 package router
 
 import (
-	"backend/internal/controllers/admin"
-	"backend/internal/middleware"
-	"backend/internal/models"
+	"backend/resource/controllers/admin"
+	"backend/resource/middleware"
+	"backend/resource/models"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"

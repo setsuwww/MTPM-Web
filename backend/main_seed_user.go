@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"backend/internal/database"
-	"backend/internal/models"
+	"backend/resource/database"
+	"backend/resource/models"
 
 	"github.com/joho/godotenv"
 	"golang.org/x/crypto/bcrypt"

@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	"backend/internal/models"
+	"backend/resource/models"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

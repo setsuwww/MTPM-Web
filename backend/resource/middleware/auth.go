@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"backend/internal/helpers"
-	"backend/internal/models"
+	"backend/resource/models"
+	"backend/resource/utils"
 	"net/http"
 	"strings"
 
@@ -20,7 +20,7 @@ func AuthMiddleware(db *gorm.DB) gin.HandlerFunc {
 		}
 
 		tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
-		claims, err := helpers.ParseToken(tokenStr)
+		claims, err := utils.ParseToken(tokenStr)
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
 			c.Abort()

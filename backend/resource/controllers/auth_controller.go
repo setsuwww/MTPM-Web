@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"backend/internal/helpers"
-	"backend/internal/models"
+	"backend/resource/models"
+	"backend/resource/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -24,7 +24,7 @@ func Register(c *gin.Context, db *gorm.DB) {
 	user := models.User{
 		Name:     input.Name,
 		Email:    input.Email,
-		Password: helpers.HashPassword(input.Password),
+		Password: utils.HashPassword(input.Password),
 		Role:     models.CLIENT,
 	}
 
@@ -33,7 +33,7 @@ func Register(c *gin.Context, db *gorm.DB) {
 		return
 	}
 
-	token, err := helpers.GenerateToken(user.ID, string(user.Role))
+	token, err := utils.GenerateToken(user.ID, string(user.Role))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
 		return
@@ -59,12 +59,12 @@ func Login(c *gin.Context, db *gorm.DB) {
 		return
 	}
 
-	if !helpers.CheckPassword(user.Password, input.Password) {
+	if !utils.CheckPassword(user.Password, input.Password) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
 		return
 	}
 
-	token, err := helpers.GenerateToken(user.ID, string(user.Role))
+	token, err := utils.GenerateToken(user.ID, string(user.Role))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
 		return

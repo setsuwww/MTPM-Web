@@ -5,8 +5,8 @@ import (
 
 	"github.com/joho/godotenv"
 
-	"backend/internal/database"
-	"backend/internal/router"
+	"backend/resource/database"
+	"backend/resource/router"
 )
 
 func main() {
