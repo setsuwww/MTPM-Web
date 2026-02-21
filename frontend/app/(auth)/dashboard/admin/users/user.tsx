@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { UserService } from "@/_lib/services/user_service";
 import { User } from "@/types/User";
@@ -121,28 +121,17 @@ export default function UsersPage() {
   return (
     <AdminLayout>
       <div className="max-w-10xl mx-auto space-y-6">
-        <UserHeader
-          selectedCount={selectedIds.length}
-          totalCount={users.length}
+        <UserHeader selectedCount={selectedIds.length} totalCount={users.length}
           onSearch={setSearchQuery}
-          roleOptions={roleOptions}
-          roleFilter={roleFilter}
-          onFilterRole={onFilterRole}
-          statusOptions={statusOptions}
-          statusFilter={statusFilter}
-          onFilterStatus={onFilterStatus}
-          onExport={handleExport}
-          onDeleteSelected={handleDeleteSelected}
-          onDeleteAll={handleDeleteAll}
+          roleOptions={roleOptions} roleFilter={roleFilter} onFilterRole={onFilterRole}
+          statusOptions={statusOptions} statusFilter={statusFilter} onFilterStatus={onFilterStatus}
+          onExport={handleExport} onDeleteSelected={handleDeleteSelected} onDeleteAll={handleDeleteAll}
           onAddUser={() => router.push("/admin/users/create")}
         />
 
         <UserTable
-          users={filteredUsers}
-          selectedIds={selectedIds}
-          loading={loading}
-          onToggleSelect={toggleSelect}
-          onToggleSelectAll={toggleSelectAll}
+          users={filteredUsers} selectedIds={selectedIds} loading={loading}
+          onToggleSelect={toggleSelect} onToggleSelectAll={toggleSelectAll}
           onDelete={handleDelete}
         />
       </div>
