@@ -5,7 +5,7 @@ export type Role =
   | "DEVELOPER"
   | "CLIENT";
 
-export const ROLE_COLORS: Record<Role, string> = {
+export const ROLE_COLORS: Record<Role | string, string> = {
   SUPER_ADMIN:
     "bg-purple-100 text-purple-700 border border-purple-200",
   ADMIN:
