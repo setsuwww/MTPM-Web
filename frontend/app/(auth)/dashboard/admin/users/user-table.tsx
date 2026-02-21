@@ -118,7 +118,7 @@ export default function UserTable({
               </TableCell>
               <TableCell>
                 <Badge className={`${ROLE_COLORS[user.Role]} font-medium px-3 py-1`}>
-                  {user.Role}
+                  {user.Role.replace("_", " ")}
                 </Badge>
               </TableCell>
               <TableCell>
