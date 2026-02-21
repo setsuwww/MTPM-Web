@@ -116,7 +116,7 @@ Policy-based access:
 
 ---
 
-## ⚙ Core Features
+## Core Features
 
 ### Task Operations
 - Create
@@ -139,7 +139,7 @@ Policy-based access:
 
 ---
 
-## 🧰 Helper Features
+## Helper Features
 
 ### Search
 PostgreSQL Full Text Search
