@@ -25,19 +25,9 @@ interface UserTableProps {
   onToggleSelectAll: () => void;
   onDelete: (id: number) => void;
   onStatusChange?: (id: number, isActive: boolean) => void;
-  onRefresh: () => void;
 }
 
-export default function UserTable({
-  users,
-  selectedIds,
-  loading,
-  onToggleSelect,
-  onToggleSelectAll,
-  onDelete,
-  onStatusChange,
-  onRefresh,
-}: UserTableProps) {
+export default function UserTable({ users, selectedIds, loading, onToggleSelect, onToggleSelectAll, onDelete, onStatusChange }: UserTableProps) {
 
   const getInitials = (name: string) => {
     return name

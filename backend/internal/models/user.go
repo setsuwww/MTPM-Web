@@ -13,12 +13,12 @@ const (
 )
 
 type User struct {
-	ID        uint `gorm:"primaryKey"`
-	Name      string
-	Email     string `gorm:"uniqueIndex"`
-	Password  string
-	Role      Role `gorm:"type:varchar(20);default:CLIENT"`
-	IsActive  bool `gorm:"default:true"`
+	ID        uint   `gorm:"primaryKey"`
+	Name      string `gorm:"type:varchar(100);not null"`
+	Email     string `gorm:"type:varchar(150);uniqueIndex;not null"`
+	Password  string `gorm:"type:text;not null" json:"-"`
+	Role      Role   `gorm:"type:varchar(20);default:CLIENT;index;not null"`
+	IsActive  bool   `gorm:"default:true;index"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }

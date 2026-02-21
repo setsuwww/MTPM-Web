@@ -14,7 +14,7 @@ func main() {
 		log.Println(".env not found, using system environment")
 	}
 
-	db := database.Connect() // kembalikan *gorm.DB
+	db := database.Connect()
 
 	r := router.SetupRouter(db)
 

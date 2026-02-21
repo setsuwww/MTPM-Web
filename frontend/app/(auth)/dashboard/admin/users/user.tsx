@@ -100,19 +100,40 @@ export default function UsersPage() {
     console.log("Exporting:", dataToExport);
   };
 
+  const roleOptions = [
+    { label: "All Roles", value: "all" },
+    { label: "Super Admin", value: "SUPER_ADMIN" },
+    { label: "Admin", value: "ADMIN" },
+    { label: "Project Manager", value: "PROJECT_MANAGER" },
+    { label: "Developer", value: "DEVELOPER" },
+    { label: "Client", value: "CLIENT" },
+  ];
+
+  const statusOptions = [
+    { label: "All Status", value: "all" },
+    { label: "Active", value: "active" },
+    { label: "Inactive", value: "inactive" },
+  ];
+
+  const onFilterRole = (val: string) => setRoleFilter(val);
+  const onFilterStatus = (val: string) => setStatusFilter(val);
+
   return (
     <AdminLayout>
       <div className="max-w-10xl mx-auto space-y-6">
         <UserHeader
           selectedCount={selectedIds.length}
-          totalUsers={users.length}
+          totalCount={users.length}
           onSearch={setSearchQuery}
-          onFilterRole={setRoleFilter}
-          onFilterStatus={setStatusFilter}
+          roleOptions={roleOptions}
+          roleFilter={roleFilter}
+          onFilterRole={onFilterRole}
+          statusOptions={statusOptions}
+          statusFilter={statusFilter}
+          onFilterStatus={onFilterStatus}
           onExport={handleExport}
           onDeleteSelected={handleDeleteSelected}
           onDeleteAll={handleDeleteAll}
-          onRefresh={fetchUsers}
           onAddUser={() => router.push("/admin/users/create")}
         />
 
@@ -123,7 +144,6 @@ export default function UsersPage() {
           onToggleSelect={toggleSelect}
           onToggleSelectAll={toggleSelectAll}
           onDelete={handleDelete}
-          onRefresh={fetchUsers}
         />
       </div>
     </AdminLayout>

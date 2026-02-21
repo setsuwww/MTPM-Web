@@ -16,43 +16,115 @@ type UserController struct {
 }
 
 func (u *UserController) GetUsers(c *gin.Context) {
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "10"))
+
+	if page < 1 {
+		page = 1
+	}
+	if limit < 1 || limit > 100 {
+		limit = 10
+	}
+
+	offset := (page - 1) * limit
+
 	var users []models.User
-	if err := u.DB.Find(&users).Error; err != nil {
+	var total int64
+
+	u.DB.Model(&models.User{}).Count(&total)
+
+	if err := u.DB.
+		Select("id", "name", "email", "role", "is_active", "created_at").
+		Limit(limit).
+		Offset(offset).
+		Order("created_at DESC").
+		Find(&users).Error; err != nil {
+
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, users)
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": users,
+		"meta": gin.H{
+			"page":  page,
+			"limit": limit,
+			"total": total,
+		},
+	})
 }
 
 func (u *UserController) GetUser(c *gin.Context) {
-	id, _ := strconv.Atoi(c.Param("id"))
-	var user models.User
-	if err := u.DB.First(&user, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
 		return
 	}
+
+	var user models.User
+	if err := u.DB.
+		Select("id", "name", "email", "role", "is_active", "created_at", "updated_at").
+		First(&user, id).Error; err != nil {
+
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+			return
+		}
+
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
 	c.JSON(http.StatusOK, user)
 }
 
 func (u *UserController) CreateUser(c *gin.Context) {
-	var input models.User
+	var input struct {
+		Name     string      `json:"name" binding:"required"`
+		Email    string      `json:"email" binding:"required,email"`
+		Password string      `json:"password" binding:"required,min=6"`
+		Role     models.Role `json:"role"`
+	}
+
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	input.Password = helpers.HashPassword(input.Password)
+	user := models.User{
+		Name:     input.Name,
+		Email:    input.Email,
+		Password: helpers.HashPassword(input.Password),
+		Role:     input.Role,
+		IsActive: true,
+	}
 
-	if err := u.DB.Create(&input).Error; err != nil {
+	if user.Role == "" {
+		user.Role = models.CLIENT
+	}
+
+	if err := u.DB.Create(&user).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusCreated, input)
+	c.JSON(http.StatusCreated, gin.H{
+		"id":        user.ID,
+		"name":      user.Name,
+		"email":     user.Email,
+		"role":      user.Role,
+		"isActive":  user.IsActive,
+		"createdAt": user.CreatedAt,
+	})
 }
 
 func (u *UserController) UpdateUser(c *gin.Context) {
-	id, _ := strconv.Atoi(c.Param("id"))
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		return
+	}
+
 	var user models.User
 	if err := u.DB.First(&user, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
@@ -66,6 +138,7 @@ func (u *UserController) UpdateUser(c *gin.Context) {
 		IsActive *bool        `json:"isActive"`
 		Password *string      `json:"password"`
 	}
+
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -83,19 +156,33 @@ func (u *UserController) UpdateUser(c *gin.Context) {
 	if input.IsActive != nil {
 		user.IsActive = *input.IsActive
 	}
-	if input.Password != nil {
+	if input.Password != nil && *input.Password != "" {
 		user.Password = helpers.HashPassword(*input.Password)
 	}
 
-	u.DB.Save(&user)
-	c.JSON(http.StatusOK, user)
+	if err := u.DB.Save(&user).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "User updated successfully",
+	})
 }
 
 func (u *UserController) DeleteUser(c *gin.Context) {
-	id, _ := strconv.Atoi(c.Param("id"))
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		return
+	}
+
 	if err := u.DB.Delete(&models.User{}, id).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "User deleted"})
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "User deleted successfully",
+	})
 }

@@ -10,8 +10,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func main() {
-	// Load .env
+func users_seed() {
 	if err := godotenv.Load(); err != nil {
 		log.Println(".env not found, using system env")
 	}

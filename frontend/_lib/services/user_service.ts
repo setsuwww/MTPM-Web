@@ -13,16 +13,14 @@ export class UserService {
     this.apiUrl = baseUrl || process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
   }
 
-  // Get all users
   async getAll(): Promise<User[]> {
     const res = await axios.get(`${this.apiUrl}/admin/users`, {
       headers: authService.getAuthHeader(),
     });
     console.log(authService.getAuthHeader())
-    return res.data || [];
+    return res.data.data || [];
   }
 
-  // Get single user by ID
   async getById(id: number): Promise<User | null> {
     try {
       const res = await axios.get(`${this.apiUrl}/admin/users/${id}`, {
@@ -35,7 +33,6 @@ export class UserService {
     }
   }
 
-  // Create user
   async create(payload: CreateUserPayload): Promise<User | null> {
     try {
       const res = await axios.post(`${this.apiUrl}/admin/users`, payload, {
@@ -74,7 +71,6 @@ export class UserService {
     }
   }
 
-  // Additional helpers
   async activate(id: number): Promise<User | null> {
     return this.update(id, { isActive: true });
   }
@@ -83,7 +79,3 @@ export class UserService {
     return this.update(id, { isActive: false });
   }
 }
-
-// Usage Example:
-// const userService = new UserService();
-// const users = await userService.getAll();
