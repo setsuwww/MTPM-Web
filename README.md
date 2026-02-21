@@ -52,38 +52,16 @@ A web-based platform for software houses to manage projects, resources, budgets,
 - [Next.js App Router](https://nextjs.org/)
 - [Shadcn UI Components](https://shadcn-ui.com/)
 - [TailwindCSS](https://tailwindcss.com/)
-- [Zustand](https://zustand-demo.pmnd.rs/) for state management
-- [TanStack Query](https://tanstack.com/query/latest) for API fetching
+- [Zustand](https://zustand-demo.pmnd.rs/) State management
+- [TanStack Query](https://tanstack.com/query/latest) API fetching
 
 **Backend**
 - [Golang](https://gin-gonic.com/en/)
-- [Neon](https://neon.com/) (Postgresql's Cloud) [Postgresql](https://www.postgresql.org/)
-- GORM ORM
-- JWT authentication
+- [Neon](https://neon.com/) Postgresql's Cloud
+- [Postgresql](https://www.postgresql.org/) Database
 
 **DevOps / Tools**
 - GitHub / GitLab for source control
 - Environment variables stored in `.env` (never push to repo)
 
 ---
-
-## Project Structure (Simplified)
-
-```text
-backend/
-├─ internal/
-│  ├─ models/
-│  ├─ database/
-│  ├─ middleware/
-│  └─ handlers/
-├─ main.go
-├─ router/
-frontend/
-├─ app/
-│  ├─ login/
-│  ├─ register/
-│  ├─ dashboard/
-│  └─ components/
-├─ _lib/
-└─ package.json
-```
