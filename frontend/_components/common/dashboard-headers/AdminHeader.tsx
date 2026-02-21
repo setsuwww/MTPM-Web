@@ -1,18 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/_stores/auth";
-
-import {
-  Menubar,
-  MenubarMenu,
-  MenubarTrigger,
-  MenubarContent,
-  MenubarItem,
-  MenubarSeparator,
-} from "@/_components/ui/menubar";
-
 import { User, Settings, LogOut, User2 } from "lucide-react";
+
+import { useAuthStore } from "@/_stores/auth";
+import { Menubar, MenubarMenu, MenubarTrigger, MenubarContent, MenubarItem, MenubarSeparator } from "@/_components/ui/menubar";
 import { Badge } from "@/_components/ui/badge";
 import { ROLE_COLORS } from "@/_constants/user";
 
@@ -39,7 +31,6 @@ export default function AdminHeader() {
 
           <MenubarContent align="end" className="w-64">
 
-            {/* Profile Info */}
             <div className="px-3 py-2 flex flex-col text-sm">
               <span className="font-semibold">{user?.name}</span>
               <span className="text-gray-500 text-xs mb-1">{user?.email}</span>
@@ -52,29 +43,19 @@ export default function AdminHeader() {
 
             <MenubarSeparator />
 
-            {/* Settings */}
-            <MenubarItem
-              onClick={() => router.push("/profiles")}
-              className="flex items-center gap-2 cursor-pointer"
-            >
+            <MenubarItem onClick={() => router.push("/profiles")} className="flex items-center gap-2 cursor-pointer">
               <User2 size={16} />
               Profile
             </MenubarItem>
 
-            {/* Settings */}
-            <MenubarItem
-              onClick={() => router.push("/settings")}
-              className="flex items-center gap-2 cursor-pointer"
-            >
+            <MenubarItem onClick={() => router.push("/settings")} className="flex items-center gap-2 cursor-pointer">
               <Settings size={16} />
               Settings
             </MenubarItem>
 
             <MenubarSeparator />
 
-            {/* Logout */}
-            <MenubarItem
-              onClick={handleLogout}
+            <MenubarItem onClick={handleLogout}
               className="flex items-center gap-2 text-red-500 cursor-pointer focus:bg-red-100 focus:text-red-500"
             >
               <LogOut size={16} className="hover:text-red-500" />

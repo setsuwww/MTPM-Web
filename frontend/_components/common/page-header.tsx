@@ -20,7 +20,7 @@ export default function PageHeader({
     action,
 }: PageHeaderProps) {
     return (
-        <div className="bg-white border border-gray-100 rounded-xl p-6 flex items-center justify-between">
+        <div className="bg-white border border-gray-300 rounded-xl p-6 flex items-center justify-between">
 
             <div className="flex items-start gap-4">
                 <div className="w-12 h-12 rounded-lg bg-teal-50 flex items-center justify-center">

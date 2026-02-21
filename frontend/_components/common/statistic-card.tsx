@@ -31,7 +31,7 @@ export default function StatisticCard({
   };
 
   return (
-    <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-200">
+    <div className="bg-white border border-gray-300 rounded-xl p-5 shadow-xs hover:shadow-sm transition-all duration-200">
 
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">

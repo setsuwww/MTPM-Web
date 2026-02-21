@@ -5,35 +5,47 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Users,
-  FolderKanban,
   PhoneCall,
+  FilePenLine,
+  Info,
+  FolderClosed,
   Settings,
 } from "lucide-react";
 
 const menus = [
   {
     name: "Dashboard",
-    href: "/admin/dashboard",
+    href: "/dashboard",
     icon: LayoutDashboard,
   },
   {
     name: "Users",
-    href: "/admin/users",
+    href: "/dashboard/admin/users",
     icon: Users,
   },
   {
     name: "Projects",
-    href: "/admin/projects",
-    icon: FolderKanban,
+    href: "dashboard/admin/projects",
+    icon: FolderClosed,
+  },
+  {
+    name: "Tasks",
+    href: "dashboard/admin/tasks",
+    icon: FilePenLine,
   },
   {
     name: "Leads",
-    href: "/admin/leads",
+    href: "dashboard/admin/leads",
     icon: PhoneCall,
   },
   {
+    name: "Reports",
+    href: "dashboard/admin/reports",
+    icon: Info,
+  },
+  {
     name: "Settings",
-    href: "/admin/settings",
+    href: "dashboard/admin/settings",
     icon: Settings,
   },
 ];
@@ -45,8 +57,8 @@ export default function AdminSidebar() {
     <aside className="w-64 bg-white border-r border-gray-100 flex flex-col">
 
       <div className="h-[68.5px] flex items-center px-6 border-b border-gray-300">
-        <h1 className="text-xl font-bold text-gray-800">
-          DIS-Web
+        <h1 className="text-xl font-bold text-gray-600">
+          <span className="text-teal-600">DIS</span>-Web.
         </h1>
       </div>
 
@@ -65,7 +77,7 @@ export default function AdminSidebar() {
                 transition-all duration-200
                 ${
                   isActive
-                    ? "bg-teal-50 text-teal-600 border-l-4 border-teal-500"
+                    ? "bg-teal-50 text-teal-800"
                     : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
                 }
               `}
