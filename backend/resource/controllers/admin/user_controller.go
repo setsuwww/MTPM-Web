@@ -80,10 +80,10 @@ func (u *UserController) GetUser(c *gin.Context) {
 
 func (u *UserController) CreateUser(c *gin.Context) {
 	var input struct {
-		Name     string      `json:"name" binding:"required"`
-		Email    string      `json:"email" binding:"required,email"`
-		Password string      `json:"password" binding:"required,min=6"`
-		Role     models.Role `json:"role"`
+		Name         string              `json:"name" binding:"required"`
+		Email        string              `json:"email" binding:"required,email"`
+		Password     string              `json:"password" binding:"required,min=6"`
+		PlatformRole models.PlatformRole `json:"role"`
 	}
 
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -92,15 +92,15 @@ func (u *UserController) CreateUser(c *gin.Context) {
 	}
 
 	user := models.User{
-		Name:     input.Name,
-		Email:    input.Email,
-		Password: utils.HashPassword(input.Password),
-		Role:     input.Role,
-		IsActive: true,
+		Name:         input.Name,
+		Email:        input.Email,
+		Password:     utils.HashPassword(input.Password),
+		PlatformRole: input.PlatformRole,
+		IsActive:     true,
 	}
 
-	if user.Role == "" {
-		user.Role = models.CLIENT
+	if user.PlatformRole == "" {
+		user.PlatformRole = models.PlatformUser
 	}
 
 	if err := u.DB.Create(&user).Error; err != nil {
@@ -112,7 +112,7 @@ func (u *UserController) CreateUser(c *gin.Context) {
 		"id":        user.ID,
 		"name":      user.Name,
 		"email":     user.Email,
-		"role":      user.Role,
+		"role":      user.PlatformRole,
 		"isActive":  user.IsActive,
 		"createdAt": user.CreatedAt,
 	})
@@ -132,11 +132,11 @@ func (u *UserController) UpdateUser(c *gin.Context) {
 	}
 
 	var input struct {
-		Name     *string      `json:"name"`
-		Email    *string      `json:"email"`
-		Role     *models.Role `json:"role"`
-		IsActive *bool        `json:"isActive"`
-		Password *string      `json:"password"`
+		Name         *string              `json:"name"`
+		Email        *string              `json:"email"`
+		PlatformRole *models.PlatformRole `json:"role"`
+		IsActive     *bool                `json:"isActive"`
+		Password     *string              `json:"password"`
 	}
 
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -150,8 +150,8 @@ func (u *UserController) UpdateUser(c *gin.Context) {
 	if input.Email != nil {
 		user.Email = *input.Email
 	}
-	if input.Role != nil {
-		user.Role = *input.Role
+	if input.PlatformRole != nil {
+		user.PlatformRole = *input.PlatformRole
 	}
 	if input.IsActive != nil {
 		user.IsActive = *input.IsActive

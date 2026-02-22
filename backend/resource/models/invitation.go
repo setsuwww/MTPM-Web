@@ -18,7 +18,7 @@ type Invitation struct {
 	ID             uuid.UUID        `gorm:"type:uuid;primaryKey"`
 	OrganizationID uuid.UUID        `gorm:"type:uuid;index;not null"`
 	Email          string           `gorm:"type:varchar(150);index"`
-	Role           Role             `gorm:"type:varchar(20)"`
+	Role           OrganizationRole `gorm:"type:varchar(20)"`
 	Token          string           `gorm:"type:varchar(255);uniqueIndex"`
 	Status         InvitationStatus `gorm:"type:varchar(20);default:'PENDING'"`
 

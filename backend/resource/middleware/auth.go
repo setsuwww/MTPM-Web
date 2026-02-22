@@ -46,7 +46,7 @@ func AuthMiddleware(db *gorm.DB) gin.HandlerFunc {
 	}
 }
 
-func RoleMiddleware(allowedRoles ...models.Role) gin.HandlerFunc {
+func RoleMiddleware(allowedRoles ...models.PlatformRole) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		userIface, exists := c.Get("currentUser")
 		if !exists {
@@ -57,7 +57,7 @@ func RoleMiddleware(allowedRoles ...models.Role) gin.HandlerFunc {
 
 		user := userIface.(models.User)
 		for _, role := range allowedRoles {
-			if user.Role == role {
+			if user.PlatformRole == role {
 				c.Next()
 				return
 			}

@@ -4,25 +4,23 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"gorm.io/gorm"
 )
 
-type OrgRole string
+type OrganizationRole string
 
 const (
-	RoleOwner  OrgRole = "OWNER"
-	RoleAdmin  OrgRole = "ADMIN"
-	RoleMember OrgRole = "MEMBER"
-	RoleViewer OrgRole = "VIEWER"
+	OrgOwner          OrganizationRole = "OWNER"
+	OrgAdmin          OrganizationRole = "ADMIN"
+	OrgProjectManager OrganizationRole = "PROJECT_MANAGER"
+	OrgMember         OrganizationRole = "MEMBER"
+	OrgViewer         OrganizationRole = "VIEWER"
 )
 
 type OrganizationMember struct {
-	ID             uuid.UUID `gorm:"type:uuid;primaryKey"`
-	OrganizationID uuid.UUID `gorm:"type:uuid;index;not null"`
-	UserID         uuid.UUID `gorm:"type:uuid;index;not null"`
-	Role           OrgRole   `gorm:"type:varchar(20);not null"`
+	ID             uuid.UUID        `gorm:"type:uuid;primaryKey"`
+	OrganizationID uuid.UUID        `gorm:"type:uuid;index;not null"`
+	UserID         uint             `gorm:"index;not null"`
+	Role           OrganizationRole `gorm:"type:varchar(30);not null"`
 
 	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt gorm.DeletedAt `gorm:"index"`
 }

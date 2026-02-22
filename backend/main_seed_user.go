@@ -20,11 +20,7 @@ func users_seed() {
 
 	// Users to seed
 	users := []models.User{
-		{Name: "Super Admin", Email: "superadmin@example.com", Role: models.SUPER_ADMIN, Password: "password123"},
-		{Name: "Admin", Email: "admin@example.com", Role: models.ADMIN, Password: "password123"},
-		{Name: "Project Manager", Email: "pm@example.com", Role: models.PROJECT_MANAGER, Password: "password123"},
-		{Name: "Developer", Email: "developer@example.com", Role: models.DEVELOPER, Password: "password123"},
-		{Name: "Client", Email: "client@example.com", Role: models.CLIENT, Password: "password123"},
+		{Name: "Super Admin", Email: "superadmin@example.com", PlatformRole: models.PlatformSuperAdmin, Password: "password123"},
 	}
 
 	for _, u := range users {

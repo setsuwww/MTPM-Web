@@ -22,10 +22,10 @@ func Register(c *gin.Context, db *gorm.DB) {
 	}
 
 	user := models.User{
-		Name:     input.Name,
-		Email:    input.Email,
-		Password: utils.HashPassword(input.Password),
-		Role:     models.CLIENT,
+		Name:         input.Name,
+		Email:        input.Email,
+		Password:     utils.HashPassword(input.Password),
+		PlatformRole: models.PlatformUser,
 	}
 
 	if err := db.Create(&user).Error; err != nil {
@@ -33,7 +33,7 @@ func Register(c *gin.Context, db *gorm.DB) {
 		return
 	}
 
-	token, err := utils.GenerateToken(user.ID, string(user.Role))
+	token, err := utils.GenerateToken(user.ID, string(user.PlatformRole))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
 		return
@@ -64,7 +64,7 @@ func Login(c *gin.Context, db *gorm.DB) {
 		return
 	}
 
-	token, err := utils.GenerateToken(user.ID, string(user.Role))
+	token, err := utils.GenerateToken(user.ID, string(user.PlatformRole))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
 		return
@@ -76,7 +76,7 @@ func Login(c *gin.Context, db *gorm.DB) {
 			"id":    user.ID,
 			"name":  user.Name,
 			"email": user.Email,
-			"role":  user.Role,
+			"role":  user.PlatformRole,
 		},
 	})
 }
@@ -95,7 +95,7 @@ func Me(c *gin.Context) {
 			"id":    user.ID,
 			"name":  user.Name,
 			"email": user.Email,
-			"role":  user.Role,
+			"role":  user.PlatformRole,
 		},
 	})
 }
