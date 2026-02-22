@@ -30,14 +30,6 @@ func Connect() *gorm.DB {
 func runMigrations() {
 	err := DB.AutoMigrate(
 		&models.User{},
-		&models.Client{},
-		&models.Project{},
-		&models.Sprint{},
-		&models.Task{},
-		&models.Milestone{},
-		&models.ChangeRequest{},
-		&models.Expense{},
-		&models.TimeLog{},
 	)
 
 	if err != nil {

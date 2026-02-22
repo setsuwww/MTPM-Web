@@ -1,34 +1,31 @@
 package models
 
-import "time"
+import (
+	"time"
 
-type Status string
+	"github.com/google/uuid"
+	"gorm.io/gorm"
+)
+
+type ProjectStatus string
 
 const (
-	PENDING   Status = "PENDING"
-	APPROVED  Status = "APPROVED"
-	REJECTED  Status = "REJECTED"
-	CANCELED  Status = "CANCELED"
-	COMPLETED Status = "COMPLETED"
+	ProjectActive   ProjectStatus = "ACTIVE"
+	ProjectArchived ProjectStatus = "ARCHIVED"
 )
 
 type Project struct {
-	ID       uint `gorm:"primaryKey"`
-	Name     string
-	ClientID uint
-	Client   Client `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	Status   Status `gorm:"type:varchar(20);default:'PENDING'"`
+	ID             uuid.UUID `gorm:"type:uuid;primaryKey"`
+	OrganizationID uuid.UUID `gorm:"type:uuid;index;not null"`
 
-	Milestones []Milestone
-	Tasks      []Task
+	Name        string        `gorm:"type:varchar(150);not null"`
+	Description string        `gorm:"type:text"`
+	Status      ProjectStatus `gorm:"type:varchar(20);default:'ACTIVE'"`
 
-	ContractValue  float64
-	EstimatedHours float64
-	EstimatedCost  float64
-
-	StartDate time.Time
-	EndDate   time.Time
+	StartDate *time.Time
+	EndDate   *time.Time
 
 	CreatedAt time.Time
 	UpdatedAt time.Time
+	DeletedAt gorm.DeletedAt `gorm:"index"`
 }
