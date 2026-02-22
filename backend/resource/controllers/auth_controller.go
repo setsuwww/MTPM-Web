@@ -1,9 +1,10 @@
 package controllers
 
 import (
+	"net/http"
+
 	"backend/resource/models"
 	"backend/resource/utils"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -11,11 +12,10 @@ import (
 
 func Register(c *gin.Context, db *gorm.DB) {
 	var input struct {
-		Name     string `json:"name"`
-		Email    string `json:"email"`
-		Password string `json:"password"`
+		Name     string `json:"name" binding:"required"`
+		Email    string `json:"email" binding:"required,email"`
+		Password string `json:"password" binding:"required,min=6"`
 	}
-
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -26,6 +26,7 @@ func Register(c *gin.Context, db *gorm.DB) {
 		Email:        input.Email,
 		Password:     utils.HashPassword(input.Password),
 		PlatformRole: models.PlatformUser,
+		IsActive:     true,
 	}
 
 	if err := db.Create(&user).Error; err != nil {
@@ -33,21 +34,18 @@ func Register(c *gin.Context, db *gorm.DB) {
 		return
 	}
 
-	token, err := utils.GenerateToken(user.ID, string(user.PlatformRole))
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
-		return
-	}
-
-	c.JSON(http.StatusCreated, gin.H{"token": token})
+	token, _ := utils.GenerateToken(user.ID, string(user.PlatformRole))
+	c.JSON(http.StatusCreated, gin.H{
+		"user":  user,
+		"token": token,
+	})
 }
 
 func Login(c *gin.Context, db *gorm.DB) {
 	var input struct {
-		Email    string `json:"email"`
-		Password string `json:"password"`
+		Email    string `json:"email" binding:"required,email"`
+		Password string `json:"password" binding:"required"`
 	}
-
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -59,25 +57,15 @@ func Login(c *gin.Context, db *gorm.DB) {
 		return
 	}
 
-	if !utils.CheckPassword(user.Password, input.Password) {
+	if !utils.CheckPassword(input.Password, user.Password) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
 		return
 	}
 
-	token, err := utils.GenerateToken(user.ID, string(user.PlatformRole))
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
-		return
-	}
-
+	token, _ := utils.GenerateToken(user.ID, string(user.PlatformRole))
 	c.JSON(http.StatusOK, gin.H{
+		"user":  user,
 		"token": token,
-		"user": gin.H{
-			"id":    user.ID,
-			"name":  user.Name,
-			"email": user.Email,
-			"role":  user.PlatformRole,
-		},
 	})
 }
 
@@ -87,15 +75,6 @@ func Me(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		return
 	}
-
 	user := userIface.(models.User)
-
-	c.JSON(http.StatusOK, gin.H{
-		"user": gin.H{
-			"id":    user.ID,
-			"name":  user.Name,
-			"email": user.Email,
-			"role":  user.PlatformRole,
-		},
-	})
+	c.JSON(http.StatusOK, user)
 }

@@ -1,21 +1,28 @@
+export type PlatformRole = "SUPER_ADMIN" | "ADMIN" | "USER";
+
 export interface User {
   ID: number;
   Name: string;
   Email: string;
-  Role: string | "SUPER_ADMIN" | "ADMIN" | "PROJECT_MANAGER" | "DEVELOPER" | "CLIENT";
+  Role: PlatformRole;
   IsActive: boolean;
+  CreatedAt: string;
+  UpdatedAt: string;
 }
 
+// Payload untuk create user
 export interface CreateUserPayload {
   name: string;
   email: string;
   password: string;
-  role: string;
+  role?: PlatformRole;
 }
 
+// Payload untuk update user
 export interface UpdateUserPayload {
   name?: string;
   email?: string;
-  role?: string;
+  role?: PlatformRole;
   isActive?: boolean;
+  password?: string;
 }

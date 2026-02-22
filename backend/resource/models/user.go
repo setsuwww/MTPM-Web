@@ -6,6 +6,7 @@ type PlatformRole string
 
 const (
 	PlatformSuperAdmin PlatformRole = "SUPER_ADMIN"
+	PlatformAdmin      PlatformRole = "ADMIN"
 	PlatformUser       PlatformRole = "USER"
 )
 

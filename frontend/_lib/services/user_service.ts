@@ -1,10 +1,8 @@
-// app/_lib/services/user_service.ts
 "use client";
 
 import axios from "axios";
 import { authService } from "../auth";
 import { CreateUserPayload, UpdateUserPayload, User } from "@/types/User";
-
 
 export class UserService {
   private apiUrl: string;

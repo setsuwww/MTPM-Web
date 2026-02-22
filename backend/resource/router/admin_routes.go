@@ -15,10 +15,10 @@ func AdminRoutes(r *gin.Engine, db *gorm.DB) {
 	adminGroup := r.Group("/admin")
 	adminGroup.Use(middleware.AuthMiddleware(db))
 	{
-		adminGroup.GET("/users", middleware.RoleMiddleware(models.PlatformSuperAdmin), uc.GetUsers)
-		adminGroup.GET("/users/:id", middleware.RoleMiddleware(models.PlatformSuperAdmin), uc.GetUser)
-		adminGroup.POST("/users", middleware.RoleMiddleware(models.PlatformSuperAdmin), uc.CreateUser)
-		adminGroup.PATCH("/users/:id", middleware.RoleMiddleware(models.PlatformSuperAdmin), uc.UpdateUser)
-		adminGroup.DELETE("/users/:id", middleware.RoleMiddleware(models.PlatformSuperAdmin), uc.DeleteUser)
+		adminGroup.GET("/users", middleware.RoleMiddleware(models.PlatformSuperAdmin, models.PlatformAdmin), uc.GetUsers)
+		adminGroup.GET("/users/:id", middleware.RoleMiddleware(models.PlatformSuperAdmin, models.PlatformAdmin), uc.GetUser)
+		adminGroup.POST("/users", middleware.RoleMiddleware(models.PlatformSuperAdmin, models.PlatformAdmin), uc.CreateUser)
+		adminGroup.PATCH("/users/:id", middleware.RoleMiddleware(models.PlatformSuperAdmin, models.PlatformAdmin), uc.UpdateUser)
+		adminGroup.DELETE("/users/:id", middleware.RoleMiddleware(models.PlatformSuperAdmin, models.PlatformAdmin), uc.DeleteUser)
 	}
 }

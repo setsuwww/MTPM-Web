@@ -14,25 +14,35 @@ var DB *gorm.DB
 
 func Connect() *gorm.DB {
 	dsn := os.Getenv("DATABASE_URL")
-
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal("Failed to connect:", err)
 	}
 
 	DB = db
-
-	runMigrations()
-
-	log.Println("Database connected and migrated")
+	log.Println("Database connected")
 	return db
 }
-func runMigrations() {
-	err := DB.AutoMigrate(
-		&models.User{},
+
+func RunMigrations(db *gorm.DB) {
+	db.Migrator().DropTable(
+		&models.Task{},
+		&models.Project{},
+		&models.OrganizationMember{},
+		&models.Organization{},
+		&models.Invitation{},
 	)
 
-	if err != nil {
+	db.Exec("SET search_path TO mtpmsaas_new;")
+	if err := db.AutoMigrate(
+		&models.User{},
+		&models.Organization{},
+		&models.OrganizationMember{},
+		&models.Project{},
+		&models.Task{},
+		&models.Invitation{},
+	); err != nil {
 		log.Fatal("Migration failed:", err)
 	}
+	log.Println("Database migration completed")
 }
