@@ -4,13 +4,13 @@ import { create } from "zustand";
 import axios from "axios";
 
 import { getToken } from "@/_lib/auth";
-import { Role } from "@/_constants/user";
+import { PlatformRole } from "@/types/User";
 
 export interface User {
-  id: number;
-  name: string;
-  email: string;
-  role: Role;
+  ID: number;
+  Name: string;
+  Email: string;
+  Role: PlatformRole;
 }
 
 interface AuthState {
@@ -76,9 +76,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
       if (!res.data || !res.data.user) return null;
 
-      const { id, name, email, role } = res.data.user;
-      get().setAuth(token, { id, name, email, role });
-      return { id, name, email, role };
+      const { ID, Name, Email, Role } = res.data.user;
+      get().setAuth(token, { ID, Name, Email, Role });
+      return { ID, Name, Email, Role  };
     } catch (err) {
       console.error("Failed to fetch current user:", err);
       get().resetAuth();
