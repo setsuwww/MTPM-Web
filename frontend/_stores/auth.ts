@@ -10,7 +10,7 @@ export interface User {
   ID: number;
   Name: string;
   Email: string;
-  Role: PlatformRole;
+  PlatformRole: PlatformRole;
 }
 
 interface AuthState {
@@ -76,9 +76,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
       if (!res.data || !res.data.user) return null;
 
-      const { ID, Name, Email, Role } = res.data.user;
-      get().setAuth(token, { ID, Name, Email, Role });
-      return { ID, Name, Email, Role  };
+      const { ID, Name, Email, PlatformRole } = res.data.user;
+      get().setAuth(token, { ID, Name, Email, PlatformRole });
+      return { ID, Name, Email, PlatformRole  };
     } catch (err) {
       console.error("Failed to fetch current user:", err);
       get().resetAuth();

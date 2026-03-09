@@ -1,15 +1,15 @@
 package controllers
 
 import (
-	"net/http"
-
 	"backend/resource/models"
 	"backend/resource/utils"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
+// Register user
 func Register(c *gin.Context, db *gorm.DB) {
 	var input struct {
 		Name     string `json:"name" binding:"required"`
@@ -41,6 +41,7 @@ func Register(c *gin.Context, db *gorm.DB) {
 	})
 }
 
+// Login user
 func Login(c *gin.Context, db *gorm.DB) {
 	var input struct {
 		Email    string `json:"email" binding:"required,email"`
@@ -57,7 +58,7 @@ func Login(c *gin.Context, db *gorm.DB) {
 		return
 	}
 
-	if !utils.CheckPassword(input.Password, user.Password) {
+	if !utils.CheckPassword(user.Password, input.Password) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
 		return
 	}
@@ -76,5 +77,5 @@ func Me(c *gin.Context) {
 		return
 	}
 	user := userIface.(models.User)
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, gin.H{"user": user})
 }

@@ -14,7 +14,6 @@ import (
 func SetupRouter(db *gorm.DB) *gin.Engine {
 	r := gin.Default()
 
-	// CORS
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE"},
@@ -23,24 +22,19 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 		AllowCredentials: true,
 	}))
 
-	// Public routes
 	r.POST("/register", func(c *gin.Context) { controllers.Register(c, db) })
 	r.POST("/login", func(c *gin.Context) { controllers.Login(c, db) })
 
-	// Protected routes (authenticated)
 	auth := r.Group("/auth")
 	auth.Use(middleware.AuthMiddleware(db))
 	auth.GET("/me", controllers.Me)
 
-	// Admin routes (platform roles)
 	adminGroup := r.Group("/admin")
 	adminGroup.Use(middleware.AuthMiddleware(db), middleware.RoleMiddleware(
-		// only SUPER_ADMIN & ADMIN can access
 		"SUPER_ADMIN",
 		"ADMIN",
 	))
 	{
-		// use controllers.UserController instance
 		uc := &admin.UserController{DB: db}
 		adminGroup.GET("/users", uc.GetUsers)
 		adminGroup.GET("/users/:id", uc.GetUser)

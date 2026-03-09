@@ -5,9 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/_stores/auth";
 
 import AdminDashboard from "@/_components/common/dashboards/AdminDashboard";
-import PMDashboard from "@/_components/common/dashboards/PMDashboard";
-import DevDashboard from "@/_components/common/dashboards/DeveloperDashboard";
-import ClientDashboard from "@/_components/common/dashboards/ClientDashboard";
+import UserDashboard from "@/_components/common/dashboards/UserDashboard";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -32,16 +30,12 @@ export default function DashboardPage() {
   if (loading) return <div>Loading...</div>;
   if (!user) return null;
 
-  switch (user.role) {
+  switch (user.PlatformRole) {
     case "SUPER_ADMIN":
     case "ADMIN":
       return <AdminDashboard />;
-    case "PROJECT_MANAGER":
-      return <PMDashboard />;
-    case "DEVELOPER":
-      return <DevDashboard />;
-    case "CLIENT":
-      return <ClientDashboard />;
+    case "USER":
+      return <UserDashboard />;
     default:
       return <div>Unauthorized</div>;
   }

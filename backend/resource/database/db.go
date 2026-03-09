@@ -19,8 +19,12 @@ func Connect() *gorm.DB {
 		log.Fatal("Failed to connect:", err)
 	}
 
+	if err := db.Exec("SET search_path TO mtpmsaas_new;").Error; err != nil {
+		log.Fatal("Failed to set search_path:", err)
+	}
+
 	DB = db
-	log.Println("Database connected")
+	log.Println("Database connected to schema mtpmsaas_new")
 	return db
 }
 

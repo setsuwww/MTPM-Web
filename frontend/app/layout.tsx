@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "DIS-Web",
+  title: "MTPM-Web",
   description: "Delivery Inteligence Software-as-a-Service",
 };
 

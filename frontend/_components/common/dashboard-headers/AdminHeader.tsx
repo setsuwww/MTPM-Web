@@ -8,7 +8,7 @@ import { User, Settings, LogOut, User2 } from "lucide-react";
 import { useAuthStore } from "@/_stores/auth";
 import { Menubar, MenubarMenu, MenubarTrigger, MenubarContent, MenubarItem, MenubarSeparator } from "@/_components/ui/menubar";
 import { Badge } from "@/_components/ui/badge";
-import { ROLE_COLORS } from "@/_constants/user";
+import { PLATFORM_ROLE_COLORS } from "@/_constants/user";
 
 export default function AdminHeader() {
   const router = useRouter();
@@ -20,7 +20,7 @@ export default function AdminHeader() {
     setLoadingUser(false);
   }, []);
 
-  if (loadingUser) return null; // atau skeleton
+  if (loadingUser) return null;
 
   const handleLogout = () => {
     resetAuth();
@@ -29,7 +29,7 @@ export default function AdminHeader() {
 
   return (
     <header className="bg-white px-7 py-4 flex justify-between items-center border-b border-gray-300">
-      <h1 className="text-xl font-semibold">Welcome, <span className="text-teal-700">{user?.name}</span></h1>
+      <h1 className="text-xl font-semibold">Welcome, <span className="text-teal-700">{user?.Name}</span></h1>
 
       <Menubar className="border-none bg-transparent shadow-none p-0">
         <MenubarMenu>
@@ -42,11 +42,11 @@ export default function AdminHeader() {
           <MenubarContent align="end" className="w-64">
 
             <div className="px-3 py-2 flex flex-col text-sm">
-              <span className="font-semibold">{user?.name}</span>
-              <span className="text-gray-500 text-xs mb-1">{user?.email}</span>
-              {user?.role && (
-                <Badge className={`rounded-sm ${ROLE_COLORS[user.role]}`}>
-                  {user.role.replaceAll("_", " ")}
+              <span className="font-semibold">{user?.Name}</span>
+              <span className="text-gray-500 text-xs mb-1">{user?.Email}</span>
+              {user?.PlatformRole && (
+                <Badge className={`rounded-sm ${PLATFORM_ROLE_COLORS[user.PlatformRole]}`}>
+                  {user.PlatformRole.replaceAll("_", " ")}
                 </Badge>
               )}
             </div>

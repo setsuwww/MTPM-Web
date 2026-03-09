@@ -10,6 +10,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// AuthMiddleware: cek token & set currentUser
 func AuthMiddleware(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
@@ -46,6 +47,7 @@ func AuthMiddleware(db *gorm.DB) gin.HandlerFunc {
 	}
 }
 
+// RoleMiddleware: cek role user
 func RoleMiddleware(allowedRoles ...models.PlatformRole) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		userIface, exists := c.Get("currentUser")
@@ -54,7 +56,6 @@ func RoleMiddleware(allowedRoles ...models.PlatformRole) gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-
 		user := userIface.(models.User)
 		for _, role := range allowedRoles {
 			if user.PlatformRole == role {
@@ -62,7 +63,6 @@ func RoleMiddleware(allowedRoles ...models.PlatformRole) gin.HandlerFunc {
 				return
 			}
 		}
-
 		c.JSON(http.StatusForbidden, gin.H{"error": "Forbidden"})
 		c.Abort()
 	}
